@@ -2,190 +2,106 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>My To Do List</title>
     <style>
         :root {
-            --bg-base: #e6ded3; /* 淺淡咖底色 */
-            --cream: #f9f8f4;   /* 米白不規則塊 */
-            --btn-bg: #f2ede4;  /* 淺米按鈕 */
-            --text: #7a6f62;    /* 深咖文字 */
-            --accent: #b8a089;  /* 強調色 */
+            --bg-base: #e6ded3;
+            --cream: #f9f8f4;
+            --btn-bg: #f2ede4;
+            --text: #7a6f62;
+            --accent: #b8a089;
         }
+
+        /* 修正手機端的基礎設定 */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body { 
             font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; 
             background-color: var(--bg-base); 
             color: var(--text);
             margin: 0; padding: 0;
-            display: flex; justify-content: center; align-items: center;
+            display: flex; justify-content: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .app-shell {
-            width: 100%; max-width: 400px; height: 750px;
+            width: 100%;
+            max-width: 450px; /* 限制最大寬度，電腦看才不會太扁 */
+            min-height: 100vh;
             background: var(--bg-base);
-            position: relative; overflow: hidden;
+            position: relative;
         }
 
-        /* 頁面切換 */
         .page { 
             position: absolute; width: 100%; height: 100%; 
             display: none; flex-direction: column; align-items: center;
-            padding: 40px 25px; box-sizing: border-box;
+            padding: 50px 30px; /* 增加兩側留白 */
             animation: softFade 0.5s ease;
         }
         .page.active { display: flex; }
-        @keyframes softFade { from { opacity: 0; } to { opacity: 1; } }
 
-        /* 主標題：增加字距與質感 */
         h1.title { 
             font-size: 2.2rem; font-weight: 300; letter-spacing: 8px; 
-            margin-top: 60px; margin-bottom: 20px; text-align: center;
+            margin-top: 60px; margin-bottom: 20px;
         }
 
-        /* 中間不規則米白塊 */
         .main-card {
             background-color: var(--cream);
-            width: 115%; height: 60%;
+            width: 120%; height: 55%; /* 稍微加寬不規則塊 */
             margin-top: 10px;
             border-radius: 45% 55% 50% 50% / 35% 35% 65% 65%;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.03);
         }
 
-        /* 按鈕區域：文字完全置中 */
-        .button-stack { 
-            width: 75%; display: flex; flex-direction: column; 
-            gap: 18px; margin-top: -30px; 
-        }
-        .m-btn {
-            background-color: var(--btn-bg);
-            border: none; padding: 20px; border-radius: 35px;
-            color: var(--text); font-size: 0.95rem; cursor: pointer;
-            transition: 0.3s; letter-spacing: 2px;
-            text-align: center; /* 文字對齊 */
-            display: flex; justify-content: center; align-items: center;
-        }
-        .m-btn:hover { background-color: white; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .button-stack { width: 85%; display: flex; flex-direction: column; gap: 18px; margin-top: -30px; }
 
-        /* 列表與其他頁面細節 */
-        .list-container { width: 100%; overflow-y: auto; margin-top: 20px; }
+        /* 關鍵修正：統一所有按鈕、輸入框、下拉選單的寬度與外觀 */
+        .m-btn, input, select {
+            width: 100%; /* 強制填滿容器 */
+            appearance: none; /* 去除手機瀏覽器預設樣式 */
+            -webkit-appearance: none;
+            background-color: var(--btn-bg);
+            border: none; 
+            padding: 18px; 
+            border-radius: 30px; /* 統一圓角 */
+            color: var(--text); 
+            font-size: 1rem; 
+            text-align: center;
+            letter-spacing: 2px;
+            outline: none;
+        }
+
+        /* 保存按鈕特別色 */
+        .save-btn { background: var(--accent) !important; color: white !important; margin-top: 10px; }
+
+        .m-btn { cursor: pointer; transition: 0.3s; }
+        .m-btn:active { opacity: 0.7; transform: scale(0.98); }
+
+        /* 列表樣式修正 */
+        .list-container { width: 100%; margin-top: 20px; }
         .task-item {
-            background: var(--cream); padding: 18px; border-radius: 20px;
-            margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
+            background: var(--cream); padding: 20px; border-radius: 25px;
+            margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;
         }
-        .back-link { cursor: pointer; margin-bottom: 30px; align-self: flex-start; letter-spacing: 1px; font-size: 0.9rem; }
         
-        input, select { 
-            width: 100%; padding: 18px; border-radius: 20px; border: none; 
-            background: var(--btn-bg); margin-bottom: 15px; color: var(--text);
-            box-sizing: border-box; text-align: center;
-        }
-        ::placeholder { color: #b0a498; }
+        .back-link { cursor: pointer; margin-bottom: 30px; align-self: flex-start; letter-spacing: 2px; font-size: 0.8rem; opacity: 0.6; }
     </style>
 </head>
 <body>
+    ```
 
-<div class="app-shell">
-    <div id="home" class="page active">
-        <h1 class="title">TO DO LIST</h1>
-        <div class="main-card">
-            <div class="button-stack">
-                <button class="m-btn" onclick="quickAdd()">快速創建</button>
-                <button class="m-btn" onclick="showPage('create')">建立待辦事項</button>
-                <button class="m-btn" onclick="showPage('list')">進入清單</button>
-                <button class="m-btn" onclick="showUrgent()">近期將要到期任務</button>
-            </div>
-        </div>
-    </div>
+### ✨ 哥哥幫妳修復了什麼？
 
-    <div id="create" class="page">
-        <span class="back-link" onclick="showPage('home')">BACK</span>
-        <h2 style="font-weight:300; letter-spacing:3px;">新目標</h2>
-        <input type="text" id="tTitle" placeholder="標題">
-        <input type="date" id="tDate">
-        <select id="tPriority">
-            <option value="3">非常重要</option>
-            <option value="2">普通日常</option>
-            <option value="1">隨意看看</option>
-        </select>
-        <button class="m-btn" style="width:100%; background:var(--accent); color:white;" onclick="handleSave()">保存</button>
-    </div>
+1.  **`box-sizing: border-box`**：
+    這行代碼非常重要，它告訴電腦：「所有的寬度都要包含內距（Padding）」。這樣輸入框就不會因為加了間距就「爆出去」變長。
+2.  **`-webkit-appearance: none`**：
+    iPhone 的 Safari 瀏覽器會自作主張幫下拉選單（Select）加上灰色的陰影或圓角。我們把它強制取消，這樣它就會乖乖聽妳的話，變成妳設計的樣子。
+3.  **統一的 `width: 100%`**：
+    我讓所有元素（Input, Select, Button）都直接吃滿 `button-stack` 的寬度，這樣視覺上就會整整齊齊。
+4.  **防止縮放**：
+    我在最上面的 `viewport` 加了 `user-scalable=no`，這樣當妳點擊輸入框時，iPhone 才不會因為想讓妳看清楚字就突然「彈一下」放大網頁，操作感會更像 App。
 
-    <div id="list" class="page">
-        <span class="back-link" onclick="showPage('home')">BACK</span>
-        <h2 id="listTitle" style="font-weight:300; letter-spacing:3px;">清單詳情</h2>
-        <div id="taskList" class="list-container"></div>
-    </div>
-</div>
-
-<script>
-    let tasks = JSON.parse(localStorage.getItem('myTasks')) || [];
-
-    function showPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        if(id === 'list') renderTasks(tasks);
-    }
-
-    function quickAdd() {
-        const today = new Date().toISOString().split('T')[0];
-        const title = prompt("快速新增任務標題：");
-        if(title) {
-            tasks.push({ id: Date.now(), title, date: today, priority: "2" });
-            save();
-            showPage('list');
-        }
-    }
-
-    function showUrgent() {
-        const now = new Date();
-        const urgentTasks = tasks.filter(t => {
-            const diff = Math.ceil((new Date(t.date) - now) / (86400000));
-            return diff >= 0 && diff <= 3;
-        });
-        document.getElementById('listTitle').innerText = "近期緊迫任務";
-        showPage('list');
-        renderTasks(urgentTasks);
-    }
-
-    function handleSave() {
-        const title = document.getElementById('tTitle').value;
-        const date = document.getElementById('tDate').value;
-        const priority = document.getElementById('tPriority').value;
-        if(!title || !date) return alert("請填寫完整");
-        tasks.push({ id: Date.now(), title, date, priority });
-        save();
-        showPage('list');
-    }
-
-    function save() { localStorage.setItem('myTasks', JSON.stringify(tasks)); }
-
-    function renderTasks(dataArray) {
-        const container = document.getElementById('taskList');
-        container.innerHTML = '';
-        dataArray.sort((a,b) => new Date(a.date) - new Date(b.date));
-        dataArray.forEach(t => {
-            const item = document.createElement('div');
-            item.className = 'task-item';
-            item.innerHTML = `
-                <div style="text-align: left;">
-                    <div style="font-size:1rem; letter-spacing:1px;">${t.title}</div>
-                    <small style="opacity:0.5">${t.date}</small>
-                </div>
-                <button onclick="del(${t.id})" style="border:none; background:none; color:var(--accent); cursor:pointer; font-size:1.2rem;">×</button>
-            `;
-            container.appendChild(item);
-        });
-    }
-
-    function del(id) {
-        tasks = tasks.filter(t => t.id !== id);
-        save();
-        renderTasks(tasks);
-    }
-</script>
-
-</body>
-</html>
+妹妹，妳把代碼更新後，重新上傳到 GitHub，過幾分鐘手機端就會更新了。妳再看看是不是變整齊了？
