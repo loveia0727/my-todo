@@ -6,14 +6,13 @@
     <title>My To Do List</title>
     <style>
         :root {
-            --bg-base: #e6ded3;
-            --cream: #f9f8f4;
-            --btn-bg: #f2ede4;
-            --text: #7a6f62;
-            --accent: #b8a089;
+            --bg-base: #e6ded3; 
+            --cream: #f9f8f4;   
+            --btn-bg: #f2ede4;  
+            --text: #7a6f62;    
+            --accent: #b8a089;  
         }
 
-        /* 修正手機端的基礎設定 */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body { 
@@ -27,9 +26,7 @@
         }
 
         .app-shell {
-            width: 100%;
-            max-width: 450px; /* 限制最大寬度，電腦看才不會太扁 */
-            min-height: 100vh;
+            width: 100%; max-width: 450px; min-height: 100vh;
             background: var(--bg-base);
             position: relative;
         }
@@ -37,19 +34,20 @@
         .page { 
             position: absolute; width: 100%; height: 100%; 
             display: none; flex-direction: column; align-items: center;
-            padding: 50px 30px; /* 增加兩側留白 */
+            padding: 50px 30px; 
             animation: softFade 0.5s ease;
         }
         .page.active { display: flex; }
+        @keyframes softFade { from { opacity: 0; } to { opacity: 1; } }
 
         h1.title { 
             font-size: 2.2rem; font-weight: 300; letter-spacing: 8px; 
-            margin-top: 60px; margin-bottom: 20px;
+            margin-top: 60px; margin-bottom: 20px; text-align: center;
         }
 
         .main-card {
             background-color: var(--cream);
-            width: 120%; height: 55%; /* 稍微加寬不規則塊 */
+            width: 120%; height: 55%;
             margin-top: 10px;
             border-radius: 45% 55% 50% 50% / 35% 35% 65% 65%;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -58,36 +56,53 @@
 
         .button-stack { width: 85%; display: flex; flex-direction: column; gap: 18px; margin-top: -30px; }
 
-        /* 關鍵修正：統一所有按鈕、輸入框、下拉選單的寬度與外觀 */
         .m-btn, input, select {
-            width: 100%; /* 強制填滿容器 */
-            appearance: none; /* 去除手機瀏覽器預設樣式 */
-            -webkit-appearance: none;
+            width: 100%;
+            appearance: none; -webkit-appearance: none;
             background-color: var(--btn-bg);
-            border: none; 
-            padding: 18px; 
-            border-radius: 30px; /* 統一圓角 */
-            color: var(--text); 
-            font-size: 1rem; 
-            text-align: center;
-            letter-spacing: 2px;
-            outline: none;
+            border: none; padding: 18px; border-radius: 35px;
+            color: var(--text); font-size: 1rem; text-align: center;
+            letter-spacing: 2px; outline: none; transition: 0.3s;
         }
 
-        /* 保存按鈕特別色 */
         .save-btn { background: var(--accent) !important; color: white !important; margin-top: 10px; }
-
-        .m-btn { cursor: pointer; transition: 0.3s; }
         .m-btn:active { opacity: 0.7; transform: scale(0.98); }
 
-        /* 列表樣式修正 */
-        .list-container { width: 100%; margin-top: 20px; }
+        .list-container { width: 100%; overflow-y: auto; margin-top: 20px; }
         .task-item {
-            background: var(--cream); padding: 20px; border-radius: 25px;
-            margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;
+            background: var(--cream); padding: 18px; border-radius: 25px;
+            margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
         }
         
-        .back-link { cursor: pointer; margin-bottom: 30px; align-self: flex-start; letter-spacing: 2px; font-size: 0.8rem; opacity: 0.6; }
+        .back-link { cursor: pointer; margin-bottom: 30px; align-self: flex-start; letter-spacing: 2px; font-size: 0.8rem; opacity: 0.6; text-decoration: none; color: inherit; }
     </style>
 </head>
 <body>
+
+<div class="app-shell">
+    <div id="home" class="page active">
+        <h1 class="title">TO DO LIST</h1>
+        <div class="main-card">
+            <div class="button-stack">
+                <button class="m-btn" onclick="quickAdd()">快速創建</button>
+                <button class="m-btn" onclick="showPage('create')">建立待辦事項</button>
+                <button class="m-btn" onclick="showPage('list')">進入清單</button>
+                <button class="m-btn" onclick="showUrgent()">近期將要到期任務</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="create" class="page">
+        <div class="back-link" onclick="showPage('home')">BACK</div>
+        <h2 style="font-weight:300; letter-spacing:3px;">新目標</h2>
+        <input type="text" id="tTitle" placeholder="標題">
+        <input type="date" id="tDate">
+        <select id="tPriority">
+            <option value="3">非常重要</option>
+            <option value="2">普通日常</option>
+            <option value="1">隨意看看</option>
+        </select>
+        <button class="m-btn save-btn" onclick="handleSave()">保存</button>
+    </div>
+
+    <div id="list" class="
