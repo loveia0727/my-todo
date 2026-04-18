@@ -6,75 +6,46 @@
     <title>My To Do List</title>
     <style>
         :root {
-            --bg-base: #e6ded3; 
-            --cream: #f9f8f4;   
-            --btn-bg: #f2ede4;  
-            --text: #7a6f62;    
-            --accent: #b8a089;  
+            --bg-base: #e6ded3; --cream: #f9f8f4; --btn-bg: #f2ede4; --text: #7a6f62; --accent: #b8a089;
+            --m-red-3: #e8d0cc; --m-red-2: #dab6b1; --m-red-1: #c99c96; --m-red-0: #b8827a;
         }
-
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body { 
-            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; 
-            background-color: var(--bg-base); 
-            color: var(--text);
-            margin: 0; padding: 0;
-            display: flex; justify-content: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .app-shell {
-            width: 100%; max-width: 450px; min-height: 100vh;
-            background: var(--bg-base);
-            position: relative;
-        }
-
-        .page { 
-            position: absolute; width: 100%; height: 100%; 
-            display: none; flex-direction: column; align-items: center;
-            padding: 50px 30px; 
-            animation: softFade 0.5s ease;
-        }
+        body { font-family: "PingFang TC", "Microsoft JhengHei", sans-serif; background-color: var(--bg-base); color: var(--text); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
+        .app-shell { width: 100%; max-width: 450px; min-height: 100vh; background: var(--bg-base); position: relative; }
+        .page { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; padding: 40px 25px; animation: softFade 0.5s ease; }
         .page.active { display: flex; }
         @keyframes softFade { from { opacity: 0; } to { opacity: 1; } }
-
-        h1.title { 
-            font-size: 2.2rem; font-weight: 300; letter-spacing: 8px; 
-            margin-top: 60px; margin-bottom: 20px; text-align: center;
-        }
-
-        .main-card {
-            background-color: var(--cream);
-            width: 120%; height: 55%;
-            margin-top: 10px;
-            border-radius: 45% 55% 50% 50% / 35% 35% 65% 65%;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-        }
-
-        .button-stack { width: 85%; display: flex; flex-direction: column; gap: 18px; margin-top: -30px; }
-
-        .m-btn, input, select {
-            width: 100%;
-            appearance: none; -webkit-appearance: none;
-            background-color: var(--btn-bg);
-            border: none; padding: 18px; border-radius: 35px;
-            color: var(--text); font-size: 1rem; text-align: center;
-            letter-spacing: 2px; outline: none; transition: 0.3s;
-        }
-
-        .save-btn { background: var(--accent) !important; color: white !important; margin-top: 10px; }
-        .m-btn:active { opacity: 0.7; transform: scale(0.98); }
-
-        .list-container { width: 100%; overflow-y: auto; margin-top: 20px; }
-        .task-item {
-            background: var(--cream); padding: 18px; border-radius: 25px;
-            margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
-        }
         
-        .back-link { cursor: pointer; margin-bottom: 30px; align-self: flex-start; letter-spacing: 2px; font-size: 0.8rem; opacity: 0.6; text-decoration: none; color: inherit; }
+        h1.title { font-size: 2.2rem; font-weight: 300; letter-spacing: 8px; margin-top: 50px; margin-bottom: 15px; }
+        .main-card { background-color: var(--cream); width: 115%; height: 50%; border-radius: 45% 55% 50% 50% / 35% 35% 65% 65%; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        .button-stack, .form-group { width: 85%; display: flex; flex-direction: column; gap: 12px; margin-top: -20px; }
+        
+        .m-btn, input, select, textarea { width: 100%; appearance: none; -webkit-appearance: none; background-color: var(--btn-bg); border: none; padding: 16px; border-radius: 30px; color: var(--text); font-size: 1rem; text-align: center; letter-spacing: 2px; outline: none; font-family: inherit; }
+        textarea { height: 80px; text-align: left; padding: 15px; font-size: 0.9rem; border-radius: 20px; }
+        
+        .date-trigger { width: 100%; background-color: var(--btn-bg); padding: 16px; border-radius: 30px; color: var(--text); text-align: center; letter-spacing: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; min-height: 52px; }
+        .hidden-date { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
+
+        .category-container { width: 100%; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 5px; }
+        .filter-bar { width: 100%; display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; margin-bottom: 10px; scrollbar-width: none; }
+        .cat-btn { padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; background: var(--btn-bg); cursor: pointer; opacity: 0.5; transition: 0.3s; border: none; color: var(--text); white-space: nowrap; }
+        .cat-btn.active { opacity: 1; background: var(--accent); color: white; }
+        .add-cat-btn { background: none; border: 1px dashed var(--accent); opacity: 0.6; }
+
+        .save-btn { background: var(--accent) !important; color: white !important; }
+        .list-container { width: 100%; overflow-y: auto; margin-top: 5px; padding-bottom: 80px; }
+        .task-item { padding: 18px; border-radius: 25px; margin-bottom: 12px; display: flex; align-items: center; background-color: var(--cream); transition: 0.4s ease; transform-origin: center; }
+        /* 消失動畫 */
+        .task-item.shrink { transform: scale(0); opacity: 0; margin-bottom: -60px; pointer-events: none; }
+        
+        .check-circle { width: 22px; height: 22px; border: 2px solid var(--accent); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .check-circle.checked { background-color: var(--accent); }
+        .check-circle.checked::after { content: '✓'; color: white; font-size: 14px; }
+
+        .task-info { flex-grow: 1; text-align: left; margin-left: 12px; }
+        .priority-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+        .cat-tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; background: rgba(0,0,0,0.05); margin-left: 5px; }
+        .back-link { cursor: pointer; margin-bottom: 20px; align-self: flex-start; letter-spacing: 2px; font-size: 0.8rem; opacity: 0.6; }
     </style>
 </head>
 <body>
@@ -85,24 +56,198 @@
         <div class="main-card">
             <div class="button-stack">
                 <button class="m-btn" onclick="quickAdd()">快速創建</button>
-                <button class="m-btn" onclick="showPage('create')">建立待辦事項</button>
+                <button class="m-btn" onclick="openCreatePage()">建立新目標</button>
                 <button class="m-btn" onclick="showPage('list')">進入清單</button>
-                <button class="m-btn" onclick="showUrgent()">近期將要到期任務</button>
+                <button class="m-btn" onclick="showUrgent()">近期緊迫任務</button>
             </div>
         </div>
     </div>
 
     <div id="create" class="page">
         <div class="back-link" onclick="showPage('home')">BACK</div>
-        <h2 style="font-weight:300; letter-spacing:3px;">新目標</h2>
-        <input type="text" id="tTitle" placeholder="標題">
-        <input type="date" id="tDate">
-        <select id="tPriority">
-            <option value="3">非常重要</option>
-            <option value="2">普通日常</option>
-            <option value="1">隨意看看</option>
-        </select>
-        <button class="m-btn save-btn" onclick="handleSave()">保存</button>
+        <h2 id="createTitle" style="font-weight:300; letter-spacing:3px;">新目標</h2>
+        <div class="form-group" style="margin-top: 0;">
+            <input type="text" id="tTitle" placeholder="標題">
+            <div id="catContainer" class="category-container"></div>
+            <div class="date-mode-toggle" style="display:flex; justify-content:center; gap:15px; font-size:0.8rem; margin-bottom:5px;">
+                <span id="modeSingle" style="cursor:pointer;" onclick="setMode('single')">固定日期</span>
+                <span id="modeRange" style="cursor:pointer;" onclick="setMode('range')">日期區間</span>
+            </div>
+            <div id="dateInputArea" style="width:100%;"></div>
+            <select id="tPriority">
+                <option value="3">非常重要</option>
+                <option value="2">重要</option>
+                <option value="1">一般</option>
+            </select>
+            <textarea id="tNote" placeholder="詳細備註..."></textarea>
+            <button class="m-btn save-btn" onclick="handleSave()">保存</button>
+        </div>
     </div>
 
-    <div id="list" class="
+    <div id="list" class="page">
+        <div class="back-link" onclick="showPage('home')">BACK</div>
+        <h2 id="listTitle" style="font-weight:300; letter-spacing:3px; margin-bottom:5px;">清單詳情</h2>
+        <div id="filterBar" class="filter-bar"></div>
+        <div id="taskList" class="list-container"></div>
+    </div>
+</div>
+
+<script>
+    let tasks = JSON.parse(localStorage.getItem('myTasks')) || [];
+    let customCats = JSON.parse(localStorage.getItem('myCats')) || ['工作', '生活'];
+    let currentMode = 'single', currentCat = '工作', editingId = null, activeFilter = '全部', isUrgentMode = false;
+
+    function formatDate(dateStr) { return dateStr ? dateStr.replace(/-/g, '/') : ""; }
+    function wakeUpDate(elId) { document.getElementById(elId).showPicker(); }
+    function updateBtnText(input, btnId) {
+        const btn = document.getElementById(btnId);
+        btn.innerText = input.value ? formatDate(input.value) : (btnId.includes('Start') ? 'START' : (btnId.includes('End') ? 'END' : 'YYYY/MM/DD'));
+        btn.style.opacity = input.value ? "1" : "0.6";
+    }
+
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'list') {
+            isUrgentMode = false; 
+            document.getElementById('listTitle').innerText = "清單詳情";
+            document.getElementById('filterBar').style.display = 'flex';
+            activeFilter = '全部'; renderFilterBar(); renderTasks(tasks); 
+        }
+        if(id === 'create') renderCategories();
+    }
+
+    function renderFilterBar() {
+        const bar = document.getElementById('filterBar'); bar.innerHTML = '';
+        const allBtn = document.createElement('button');
+        allBtn.className = `cat-btn ${activeFilter === '全部' ? 'active' : ''}`;
+        allBtn.innerText = '全部';
+        allBtn.onclick = () => { activeFilter = '全部'; renderFilterBar(); renderTasks(tasks); };
+        bar.appendChild(allBtn);
+        
+        customCats.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = `cat-btn ${activeFilter === cat ? 'active' : ''}`;
+            btn.innerText = cat;
+            btn.onclick = () => { activeFilter = cat; renderFilterBar(); renderTasks(tasks.filter(t => t.category === cat)); };
+            // 增加刪除功能：長按或右鍵
+            btn.oncontextmenu = (e) => { e.preventDefault(); deleteCategory(cat); };
+            bar.appendChild(btn);
+        });
+    }
+
+    function deleteCategory(cat) {
+        if(confirm(`要刪除「${cat}」分類嗎？（不會刪除任務，但任務分類會重置）`)) {
+            customCats = customCats.filter(c => c !== cat);
+            tasks.forEach(t => { if(t.category === cat) t.category = '工作'; });
+            localStorage.setItem('myCats', JSON.stringify(customCats));
+            save(); renderFilterBar();
+        }
+    }
+
+    function renderTasks(arr) {
+        const container = document.getElementById('taskList'); container.innerHTML = '';
+        // 核心邏輯：只顯示未完成的(done === false)
+        const activeTasks = arr.filter(t => !t.done).sort((a,b) => new Date(a.date) - new Date(b.date));
+        
+        activeTasks.forEach(t => {
+            const item = document.createElement('div');
+            item.className = 'task-item';
+            item.id = `task-${t.id}`;
+            item.style.backgroundColor = getUrgencyColor(t.date);
+            item.onclick = (e) => { if (!e.target.closest('.check-circle') && !e.target.closest('.del-btn')) editTask(t.id); };
+            
+            const dot = t.priority === "3" ? "#b8827a" : (t.priority === "2" ? "#b8a089" : "#d3c8be");
+            item.innerHTML = `
+                <div class="check-circle" onclick="finishTask(${t.id}, event)"></div>
+                <div class="task-info">
+                    <div style="font-size:1rem; letter-spacing:1px;">
+                        <span class="priority-dot" style="background:${dot}"></span>${t.title}<span class="cat-tag">${t.category}</span>
+                    </div>
+                    <small style="opacity:0.6">${t.displayDate}</small>
+                    ${t.note ? `<span style="display:block; font-size:0.75rem; opacity:0.5; margin-top:3px;">${t.note}</span>` : ''}
+                </div>
+                <button class="del-btn" onclick="del(${t.id}, event)" style="border:none; background:none; color:var(--text); cursor:pointer; font-size:1.2rem; opacity:0.3;">×</button>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function finishTask(id, event) {
+        event.stopPropagation();
+        const el = document.getElementById(`task-${id}`);
+        const check = el.querySelector('.check-circle');
+        check.classList.add('checked');
+        el.classList.add('shrink'); // 播放消失動畫
+        
+        setTimeout(() => {
+            const t = tasks.find(x => x.id === id);
+            t.done = true;
+            save();
+            renderTasks(activeFilter === '全部' ? tasks : tasks.filter(x => x.category === activeFilter));
+        }, 400); // 動態延遲，讓妳看到它消失
+    }
+
+    function renderCategories() {
+        const c = document.getElementById('catContainer'); c.innerHTML = '';
+        customCats.forEach(cat => {
+            const b = document.createElement('button');
+            b.className = `cat-btn ${currentCat === cat ? 'active' : ''}`;
+            b.innerText = cat;
+            b.onclick = () => { currentCat = cat; renderCategories(); };
+            b.oncontextmenu = (e) => { e.preventDefault(); deleteCategory(cat); renderCategories(); };
+            c.appendChild(b);
+        });
+        const a = document.createElement('button'); a.className = 'cat-btn add-cat-btn'; a.innerText = '+';
+        a.onclick = () => { const n = prompt("輸入新分類名稱："); if(n && !customCats.includes(n)) { customCats.push(n); localStorage.setItem('myCats', JSON.stringify(customCats)); currentCat = n; renderCategories(); } };
+        c.appendChild(a);
+    }
+
+    function setMode(mode) {
+        currentMode = mode;
+        document.getElementById('modeSingle').style.opacity = mode === 'single' ? '1' : '0.4';
+        document.getElementById('modeRange').style.opacity = mode === 'range' ? '1' : '0.4';
+        const area = document.getElementById('dateInputArea');
+        if(mode === 'single') {
+            area.innerHTML = `<div class="date-trigger" id="btnSingle" onclick="wakeUpDate('tDate')">YYYY/MM/DD</div><input type="date" id="tDate" class="hidden-date" onchange="updateBtnText(this, 'btnSingle')">`;
+        } else {
+            area.innerHTML = `<div style="display:flex; gap:10px;"><div class="date-trigger" id="btnStart" onclick="wakeUpDate('tDateStart')" style="font-size:0.8rem">START</div><input type="date" id="tDateStart" class="hidden-date" onchange="updateBtnText(this, 'btnStart')"><div class="date-trigger" id="btnEnd" onclick="wakeUpDate('tDateEnd')" style="font-size:0.8rem">END</div><input type="date" id="tDateEnd" class="hidden-date" onchange="updateBtnText(this, 'btnEnd')"></div>`;
+        }
+    }
+
+    function handleSave() {
+        const title = document.getElementById('tTitle').value, note = document.getElementById('tNote').value, priority = document.getElementById('tPriority').value;
+        let dateVal, displayDate, start = "";
+        if (currentMode === 'single') { dateVal = document.getElementById('tDate').value; displayDate = formatDate(dateVal); }
+        else { start = document.getElementById('tDateStart').value; dateVal = document.getElementById('tDateEnd').value; displayDate = `${formatDate(start)} ~ ${formatDate(dateVal)}`; }
+        if(!title || !dateVal) return alert("填寫完整喔");
+        const data = { id: editingId || Date.now(), title, note, date: dateVal, startDate: start, displayDate, priority, mode: currentMode, category: currentCat, done: false };
+        if (editingId) tasks[tasks.findIndex(t => t.id === editingId)] = data; else tasks.push(data);
+        save(); showPage('list');
+    }
+
+    function openCreatePage() { editingId = null; currentCat = customCats[0]; showPage('create'); document.getElementById('tTitle').value = ""; document.getElementById('tNote').value = ""; setMode('single'); }
+    function quickAdd() {
+        const today = new Date().toISOString().split('T')[0], title = prompt("快速新增任務標題：");
+        if(title) { tasks.push({ id: Date.now(), title, note: "", date: today, startDate: "", displayDate: formatDate(today), priority: "2", mode: "single", category: customCats[0], done: false }); save(); showPage('list'); }
+    }
+    function editTask(id) {
+        const t = tasks.find(x => x.id === id); editingId = id; currentCat = t.category; showPage('create'); document.getElementById('createTitle').innerText = "編輯目標";
+        document.getElementById('tTitle').value = t.title; document.getElementById('tNote').value = t.note || ""; document.getElementById('tPriority').value = t.priority;
+        setMode(t.mode || 'single');
+        setTimeout(() => { if(t.mode==='range'){ const s=document.getElementById('tDateStart');s.value=t.startDate;updateBtnText(s,'btnStart');const e=document.getElementById('tDateEnd');e.value=t.date;updateBtnText(e,'btnEnd'); }else{ const d=document.getElementById('tDate');d.value=t.date;updateBtnText(d,'btnSingle'); } }, 100);
+    }
+    function getUrgencyColor(d) {
+        const diff = Math.ceil((new Date(d).setHours(0,0,0,0) - new Date().setHours(0,0,0,0)) / 86400000);
+        return diff <= 0 ? 'var(--m-red-0)' : (diff === 1 ? 'var(--m-red-1)' : (diff === 2 ? 'var(--m-red-2)' : (diff === 3 ? 'var(--m-red-3)' : 'var(--cream)')));
+    }
+    function showUrgent() {
+        isUrgentMode = true; document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('list').classList.add('active'); document.getElementById('listTitle').innerText = "近期緊迫任務"; document.getElementById('filterBar').style.display = 'none';
+        const now = new Date().setHours(0,0,0,0); renderTasks(tasks.filter(t => (new Date(t.date).setHours(0,0,0,0) - now) / 86400000 <= 3));
+    }
+    function save() { localStorage.setItem('myTasks', JSON.stringify(tasks)); }
+    function del(id, event) { event.stopPropagation(); tasks = tasks.filter(t => t.id !== id); save(); if(isUrgentMode) showUrgent(); else renderTasks(activeFilter === '全部' ? tasks : tasks.filter(x => x.category === activeFilter)); }
+</script>
+</body>
+</html>
